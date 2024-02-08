@@ -12,7 +12,7 @@
 
 // d = r * t
 // r = d / t
-// r = width / 10 seconds. 
+// r = width / 10 seconds.
 
 @implementation bouncesaverView
 
@@ -41,6 +41,7 @@
         
         
         self.dvdLogo = [[NSImage alloc] initWithContentsOfFile:dvdPath];
+        self.dvdColorIndex = 0;
         [self hitWall];
     }
     return self;
@@ -110,9 +111,13 @@
                          [NSColor magentaColor],
                          [NSColor greenColor]
                          ];
-    
-    self.dvdColor = colors[arc4random() % [colors count]];
-    
+
+    int oldColorIndex = self.dvdColorIndex; // Log old color
+    while (oldColorIndex == self.dvdColorIndex) {
+        self.dvdColorIndex = arc4random() % [colors count]; // Select random color until new
+    }
+    self.dvdColor = colors[self.dvdColorIndex]; // Assign new color
+
     [self.dvdLogo lockFocus];
     [self.dvdColor set];
     NSRect imageRect = {NSZeroPoint, [self.dvdLogo size]};
